@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Career Path & Job Recommendation System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="container mt-5">
+
+  <div class="header">
+    <h2>Career Path & Job Recommendation System</h2>
+    <p class="text-muted">Hybrid recommender using BERT + Collaborative Filtering</p>
+  </div>
+
+  <div class="card p-4">
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Enter Career Name or Row Index</label>
+        <input type="text" name="query" class="form-control" value="{{ query_value }}">
+      </div>
+      <div class="info-box">
+        <p>
+           Type a <strong>career name</strong> (e.g., "Chemist") → system uses <strong>BERT embeddings + FAISS</strong> for semantic search.<br>
+           Type a <strong>row index</strong> (e.g., "0") → system uses <strong>Collaborative Filtering</strong> on skill features.
+        </p>
+      </div>
+      <button class="btn btn-primary w-100">Get Recommendations</button>
+    </form>
+  </div>
+
+  {% if results is not none %}
+    <div class="card results-card p-4">
+      <h4 class="mb-3">Recommendations for: <span class="text-primary">{{ query_value }}</span></h4>
+      <ul class="list-group">
+        {% for _, row in results.iterrows() %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>{{row['Career']}}</strong>
+            <span class="badge bg-secondary">{{row['Field']}}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+</body>
+</html>
